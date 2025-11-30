@@ -1,0 +1,114 @@
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+/**
+ * AmicbridgeReputation
+ *
+ * A non-transferable (soulbound) ERC721-style token that represents
+ * on-chain reputation for lenders/borrowers on Amicbridge.
+ *
+ * - Only the contract owner (Amicbridge) can mint/update/burn
+ * - Tokens cannot be transferred, only minted or burned
+ */
+
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract AmicbridgeReputation is ERC721, Ownable {
+    struct ReputationData {
+        uint256 score;   // 0–100
+        string  level;   // e.g. "Bronze", "Silver", "Gold"
+        string  uri;     // off-chain metadata URI (optional)
+    }
+
+    uint256 private _nextId = 1;
+
+    // wallet => tokenId (0 if none)
+    mapping(address => uint256) public walletToken;
+
+    // tokenId => reputation data
+    mapping(uint256 => ReputationData) private _reputation;
+
+    event ReputationMinted(address indexed account, uint256 tokenId, uint256 score, string level);
+    event ReputationUpdated(uint256 indexed tokenId, uint256 score, string level);
+    event ReputationBurned(uint256 indexed tokenId, address indexed account);
+
+    constructor() ERC721("Amicbridge Reputation", "ABREP") {}
+
+    function mintReputation(
+        address account,
+        uint256 score,
+        string calldata level,
+        string calldata uri
+    ) external onlyOwner {
+        require(account != address(0), "Invalid address");
+        require(walletToken[account] == 0, "Wallet already has reputation token");
+        require(score <= 100, "Score must be <= 100");
+
+        uint256 tokenId = _nextId++;
+        walletToken[account] = tokenId;
+
+        _reputation[tokenId] = ReputationData({
+            score: score,
+            level: level,
+            uri: uri
+        });
+
+        _mint(account, tokenId);
+
+        emit ReputationMinted(account, tokenId, score, level);
+    }
+
+    function updateReputation(
+        uint256 tokenId,
+        uint256 score,
+        string calldata level,
+        string calldata uri
+    ) external onlyOwner {
+        require(_exists(tokenId), "Token does not exist");
+        require(score <= 100, "Score must be <= 100");
+
+        _reputation[tokenId].score = score;
+        _reputation[tokenId].level = level;
+        _reputation[tokenId].uri = uri;
+
+        emit ReputationUpdated(tokenId, score, level);
+    }
+
+    function burnReputation(address account) external onlyOwner {
+        uint256 tokenId = walletToken[account];
+        require(tokenId != 0, "No reputation token for wallet");
+
+        delete walletToken[account];
+        delete _reputation[tokenId];
+        _burn(tokenId);
+
+        emit ReputationBurned(tokenId, account);
+    }
+
+    function getReputation(uint256 tokenId) external view returns (ReputationData memory) {
+        require(_exists(tokenId), "Token does not exist");
+        return _reputation[tokenId];
+    }
+
+    function getReputationOf(address account) external view returns (ReputationData memory) {
+        uint256 tokenId = walletToken[account];
+        require(tokenId != 0, "No reputation token for wallet");
+        return _reputation[tokenId];
+    }
+
+    /// @dev Soulbound: prevent transfers except mint (from=0) or burn (to=0)
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId,
+        uint256 batchSize
+    ) internal override {
+        super._beforeTokenTransfer(from, to, tokenId, batchSize);
+
+        if (from != address(0) && to != address(0)) {
+            revert("Soulbound: transfers disabled");
+        }
+    }
+}
