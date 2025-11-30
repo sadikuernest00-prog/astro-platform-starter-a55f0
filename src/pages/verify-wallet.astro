@@ -1,11 +1,12 @@
 ---
-import VerifyWallet from "../components/verifywallet";
+import VerifyWallet from "../components/verifywallet.tsx";
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>Verify Wallet – Amicbridge</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
 
   <body
@@ -21,12 +22,20 @@ import VerifyWallet from "../components/verifywallet";
         Verify your crypto wallet
       </h1>
 
-      <p style="font-size: 1.2rem; opacity: 0.8; margin-bottom: 2rem;">
+      <p style="font-size: 1.1rem; opacity: 0.8; margin-bottom: 2rem;">
         This secure check proves that you own the wallet you are using on
         Amicbridge — without giving us access to your funds or private keys.
+        It&apos;s just a free message signature, no gas and no transactions.
       </p>
 
-      <VerifyWallet />
+      <!-- React component -->
+      <VerifyWallet client:load />
+
+      <p style="margin-top: 3rem; font-size: 0.85rem; color: #9ca3af;">
+        Amicbridge never holds your funds, seed phrase, or private keys. Always
+        double-check that your browser is on <strong>amicbridge.com</strong>
+        before signing anything.
+      </p>
     </div>
   </body>
 </html>
