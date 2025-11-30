@@ -1,19 +1,137 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Markdown from '../components/Markdown.astro';
+const featuresBorrower = [
+  "Reach real people willing to lend, not only institutions.",
+  "Borrow in crypto or stablecoins — directly wallet to wallet.",
+  "Use your own wallets — including hardware wallets like Ledger or Trezor.",
+  "Keep full control of your coins — Amicbridge never holds funds or keys.",
+  "Explain your situation in your own words.",
+  "Negotiate repayment terms and interest directly with lenders.",
+  "Whenever possible, we match you with manually verified lenders."
+];
 
-const explainer = `
-An Astro website can go way beyond static pages - on the right platform.
-
-Netlify supports not only [Streaming SSR](https://docs.astro.build/en/guides/server-side-rendering/#html-streaming) and fast [Edge Middleware](https://docs.astro.build/en/guides/middleware/), but also [on-demand revalidation](https://www.netlify.com/blog/cache-tags-and-purge-api-on-netlify/) and [stale-while-revalidate](https://www.netlify.com/blog/swr-and-fine-grained-cache-control/). 
-Any page or data can be rebuilt only when needed, without site visitors ever getting a performance hit.
-`;
+const featuresLender = [
+  "See real people and projects, not just numbers.",
+  "Lend using crypto or stablecoins — directly wallet to wallet.",
+  "Use any wallet you prefer (exchange, software, or hardware wallets).",
+  "Earn interest by lending directly to borrowers — you choose the rate.",
+  "You stay in control — Amicbridge never stores or holds your coins or private keys.",
+  "Set your own interest rate and conditions.",
+  "Chat with borrowers before you commit.",
+  "Apply for a Verified lender badge after a quick manual review."
+];
 ---
 
-<Layout title="Welcome to Astro.">
-    <h1 class="mb-10">Netlify Platform Starter for Astro</h1>
-    <Markdown content={explainer} class="mb-10 text-lg" />
-    <p>
-        <a href="https://docs.netlify.com/frameworks/astro/" class="btn btn-lg sm:min-w-64">Read the Docs</a>
-    </p>
-</Layout>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Amicbridge – Peer-to-Peer Crypto Lending</title>
+
+    <meta
+      name="description"
+      content="Amicbridge connects crypto borrowers and lenders directly — wallet-to-wallet, fully non-custodial."
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #020617;
+        --card: #020617;
+        --accent: #22c55e;
+        --accent-soft: #064e3b;
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --border: #1f2933;
+      }
+
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        background: radial-gradient(circle at top, #0f172a 0, #020617 55%);
+        color: var(--text);
+      }
+
+      .shell {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2.5rem 1.5rem 4rem;
+      }
+
+      h1 {
+        font-size: clamp(2.3rem, 3vw + 1.2rem, 3.1rem);
+        line-height: 1.05;
+        margin-bottom: 1rem;
+      }
+
+      h1 span {
+        color: var(--accent);
+      }
+
+      .feature-card {
+        border-radius: 1rem;
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        background: radial-gradient(circle at top left, #0f172a, #020617);
+        padding: 1.2rem 1.3rem 1.1rem;
+      }
+
+      .feature-card h2 {
+        font-size: 1.1rem;
+        margin-bottom: 0.4rem;
+      }
+
+      .feature-card ul {
+        padding-left: 1.1rem;
+        margin: 0.3rem 0 0.5rem;
+        font-size: 0.86rem;
+        color: var(--muted);
+      }
+
+      .feature-card li + li {
+        margin-top: 0.25rem;
+      }
+
+      footer {
+        margin-top: 2.5rem;
+        font-size: 0.75rem;
+        color: var(--muted);
+        border-top: 1px solid rgba(30, 64, 175, 0.3);
+        padding-top: 1rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="shell">
+      <h1>
+        Borrow crypto. <span>Lend crypto.</span><br />
+        Wallet to wallet. No custodian.
+      </h1>
+
+      <section class="features" style="display:grid; gap:1rem; margin-top:3rem;">
+        <div class="feature-card">
+          <h2>For borrowers</h2>
+          <ul>
+            {featuresBorrower.map(f => <li>{f}</li>)}
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <h2>For lenders</h2>
+          <ul>
+            {featuresLender.map(f => <li>{f}</li>)}
+          </ul>
+        </div>
+      </section>
+
+      <footer>
+        <p>
+          <strong>Important:</strong> Amicbridge is a connection platform.
+          We never hold funds, private keys, or custody. All payments and agreements
+          happen directly between wallets. Always verify who you are dealing with
+          before sending any crypto.
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
