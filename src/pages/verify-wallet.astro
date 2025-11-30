@@ -1,0 +1,32 @@
+---
+import VerifyWallet from "../components/verifywallet";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Verify Wallet – Amicbridge</title>
+  </head>
+
+  <body
+    style="
+      background: radial-gradient(circle at top, #0f172a 0, #020617 55%);
+      color: #e5e7eb;
+      font-family: system-ui, sans-serif;
+      padding: 2rem;
+    "
+  >
+    <div style="max-width: 700px; margin: 0 auto;">
+      <h1 style="font-size: 2.4rem; margin-bottom: 1rem;">
+        Verify your crypto wallet
+      </h1>
+
+      <p style="font-size: 1.2rem; opacity: 0.8; margin-bottom: 2rem;">
+        This secure check proves that you own the wallet you are using on
+        Amicbridge — without giving us access to your funds or private keys.
+      </p>
+
+      <VerifyWallet />
+    </div>
+  </body>
+</html>
